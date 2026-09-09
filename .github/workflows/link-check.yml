@@ -26,7 +26,9 @@ jobs:
         run: |
           set -uo pipefail
           UA='Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36'
-          grep -oh 'https\?://[^)"< ]*' README.md | sed 's/[.,]$//' | sort -u > urls.txt
+          # Exclude }, {, > and backtick too: BibTeX writes url = {https://...}
+          # and a naive class swallows the closing brace into the URL.
+          grep -oh 'https\?://[^)"<>{}` ]*' README.md | sed 's/[.,;:]*$//' | sort -u > urls.txt
           echo "Checking $(wc -l < urls.txt) unique URLs"
           : > broken.txt
           while read -r u; do
