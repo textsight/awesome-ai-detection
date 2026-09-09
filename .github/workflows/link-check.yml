@@ -1,0 +1,66 @@
+name: Link check
+
+# A curated list dies from dead links, not from a missing "last updated" line.
+# This runs monthly and opens an issue when something rots, so the list stays
+# accurate without anyone having to remember to check it.
+
+on:
+  schedule:
+    - cron: '0 6 1 * *'   # 06:00 UTC, 1st of each month
+  workflow_dispatch:
+  pull_request:
+    paths: ['README.md']
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Extract and check every link
+        id: check
+        run: |
+          set -uo pipefail
+          UA='Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36'
+          grep -oh 'https\?://[^)"< ]*' README.md | sed 's/[.,]$//' | sort -u > urls.txt
+          echo "Checking $(wc -l < urls.txt) unique URLs"
+          : > broken.txt
+          while read -r u; do
+            code=$(curl -s -o /dev/null -w '%{http_code}' -L -A "$UA" --max-time 25 "$u" || echo 000)
+            # 403/429 are bot-blocks (Cloudflare et al), not dead links.
+            case "$code" in
+              2*|3*|403|429) printf 'ok   %-4s %s\n' "$code" "$u" ;;
+              *)             printf 'DEAD %-4s %s\n' "$code" "$u"; echo "- \`$code\` $u" >> broken.txt ;;
+            esac
+          done < urls.txt
+          if [ -s broken.txt ]; then
+            echo "broken=true" >> "$GITHUB_OUTPUT"
+            { echo 'body<<EOF'; echo 'The monthly link check found dead links in `README.md`:'; echo;
+              cat broken.txt; echo;
+              echo '`403` and `429` are treated as alive (bot protection), so everything above is a real failure.';
+              echo 'EOF'; } >> "$GITHUB_OUTPUT"
+          else
+            echo "broken=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Fail the PR when links are dead
+        if: steps.check.outputs.broken == 'true' && github.event_name == 'pull_request'
+        run: echo "::error::Dead links in README.md — see the step log" && exit 1
+
+      - name: Open an issue when links rot
+        if: steps.check.outputs.broken == 'true' && github.event_name != 'pull_request'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BODY: ${{ steps.check.outputs.body }}
+        run: |
+          existing=$(gh issue list --state open --label link-rot --limit 1 --json number --jq '.[0].number // empty')
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --body "$BODY"
+          else
+            gh label create link-rot --color D93F0B --description "Dead links found by the scheduled check" 2>/dev/null || true
+            gh issue create --title "Dead links found in README" --label link-rot --body "$BODY"
+          fi
