@@ -121,6 +121,7 @@ reproducible. Alphabetical.
 | [QuillBot](https://quillbot.com/ai-content-detector) | Free detector attached to the paraphrasing suite |
 | [Quetext](https://www.quetext.com/ai-detector) | Originality checking for academic and professional use |
 | [Reality Defender](https://www.realitydefender.com/) | Deepfake and synthetic-media detection; enterprise and public sector |
+| [isthisaigenerated.app](https://isthisaigenerated.app/site/ai-image-detector/) | Free warning-only detectors for images, sampled video, text and documents; multilingual (EN/NL/ID), publishes [measured slices and limits](https://isthisaigenerated.app/site/accuracy/). *Affiliated: the submitter maintains this tool* |
 | [Sapling](https://sapling.ai/ai-content-detector) | Detector with an API, aimed at developers |
 | [Scribbr](https://www.scribbr.com/ai-detector/) | Student-facing checker from the academic writing service |
 | [Smodin](https://smodin.io/ai-content-detector) | Multilingual detection in a broader writing toolkit |
