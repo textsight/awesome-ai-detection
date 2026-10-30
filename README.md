@@ -115,6 +115,7 @@ reproducible. Alphabetical.
 | [Grammarly](https://www.grammarly.com/ai-detector) | AI detection bundled into the writing assistant |
 | [Hive Moderation](https://hivemoderation.com/ai-generated-content-detection) | Content-moderation API covering AI text and synthetic media |
 | [Isgen](https://isgen.ai/) | Multilingual detection across a wide language set |
+| [Linda](https://github.com/Lendarixon/Linda) | Local detector for English, Polish and Russian: stylometry plus fine-tuned DeBERTa models, with a smaller CPU model, passage highlighting and PDF reports; weights public on Hugging Face, free for personal non-commercial use (CC BY-NC), paid licence for commercial use. *Submitted by its author* |
 | [Originality.ai](https://originality.ai/ai-checker) | Aimed at publishers, SEO teams and content agencies |
 | [Pangram Labs](https://www.pangramlabs.com/) | Enterprise detection; publishes its own evaluation work |
 | [PlagiarismCheck / TraceGPT](https://plagiarismcheck.org/ai-detector/) | Detection with document reports for institutions |
