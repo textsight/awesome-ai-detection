@@ -108,6 +108,7 @@ reproducible. Alphabetical.
 
 | Tool | What it is |
 |---|---|
+| [Coda One](https://www.codaone.ai/) | Free AI detector with no signup; also offers a rewriter and grammar checker. |
 | [Compilatio](https://www.compilatio.net/) | Plagiarism and AI detection for European education institutions |
 | [Copyleaks](https://copyleaks.com/ai-content-detector) | Enterprise AI detection and plagiarism, with LMS integrations |
 | [GPTKit](https://gptkit.ai/) | Multi-model detection reporting a combined score |
